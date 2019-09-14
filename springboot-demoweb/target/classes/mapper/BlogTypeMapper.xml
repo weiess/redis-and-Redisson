@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yzl.mapper.BlogTypeMapper">
+    <resultMap id="BlogTypeResult" type="com.yzl.pojo.BlogType">
+        <id property="id" column="id" />
+        <result property="typeName" column="typeName"/>
+        <result property="orderNum" column="orderNum"/>
+        <result property="isShow" column="isShow"/>
+    </resultMap>
+
+    <sql id="BlogTypeList">
+        id,typeName,orderNum,isShow
+    </sql>
+
+    <select id="getAllTypes" parameterType="String" resultMap="BlogTypeResult">
+        SELECT
+        <include refid="BlogTypeList" />
+        FROM t_blogType ORDER BY orderNum DESC
+    </select>
+
+    <update id="updateBlogType" parameterType="com.yzl.pojo.BlogType">
+        update t_blogtype
+        <set>
+            <if test="typeName!=null and typeName!=''">
+                typeName=#{typeName},
+            </if>
+            <if test="orderNum!=null and orderNum!=''">
+                orderNum=#{orderNum},
+            </if>
+            <if test="isShow!=null">
+                isshow=#{isShow},
+            </if>
+        </set>
+        where id=#{id}
+    </update>
+
+    <insert id="insertBlogType" parameterType="com.yzl.pojo.BlogType" keyProperty="id" useGeneratedKeys="true">
+    INSERT INTO t_blogtype VALUES(null,#{typeName},#{orderNum},#{isShow})
+    </insert>
+
+    <delete id="deleteBlogType" parameterType="Integer">
+        DELETE FROM t_blogtype WHERE id=#{id}
+    </delete>
+
+    <select id="findById" parameterType="Integer" resultMap="BlogTypeResult">
+        SELECT * FROM t_blogtype WHERE id=#{id}
+    </select>
+</mapper>
